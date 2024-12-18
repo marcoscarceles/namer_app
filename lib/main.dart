@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -150,10 +152,7 @@ class FavoritesPage extends StatelessWidget {
                       )
                     ),
                     SizedBox(width: 20,),
-                    ElevatedButton.icon(
-                      icon: Icon(Icons.favorite_border),
-                      onPressed: () => appState.unfav(favorite),
-                      label: Text("Unfav"),)
+                    Unfav(appState: appState, favorite: favorite)
                   ],
                 ),
               );
@@ -162,6 +161,41 @@ class FavoritesPage extends StatelessWidget {
         )
       ),
     );
+  }
+}
+
+class Unfav extends StatefulWidget {
+  const Unfav({
+    super.key,
+    required this.appState,
+    required this.favorite
+  });
+
+  final MyAppState appState;
+  final favorite;
+
+  @override
+  State<Unfav> createState() => _UnfavState();
+}
+
+class _UnfavState extends State<Unfav> {
+
+  var icon = Icons.delete_outline;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      icon: Icon(icon),
+      onPressed: () => {},
+      onLongPress: () {
+        setState(() {
+          icon = Icons.delete_forever;
+        });
+        Future.delayed(Duration(seconds: 1), () {
+          widget.appState.unfav(widget.favorite);
+        });
+      },
+      label: Text("Unfav"),);
   }
 }
 
